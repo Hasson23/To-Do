@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do </title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <style>
+        body{
+            background-color: rgb(30, 0, 77);
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+        .Table-Task{
+            background-color: rgb(239, 239, 239);
+            width: 60%;
+            /* height: 500px; */
+            margin-top: 130px;
+        }
+
+        button{
+            border: none;
+            font-size: 20px;
+            box-shadow: 0px 3px 5px rgba(168, 168, 168, 0.38);
+        }
+
+        .actions{
+            display: flex;
+        }
+
+        .circle{
+            width: 40px;
+            line-height: 0;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .task{
+            display: flex;
+            background-color: white;
+            border-bottom: solid 1px black;
+            transition: all .2s;
+        }
+
+        .done{
+            background-color: rgb(158, 253, 160);
+        }
+
+        .task:hover{
+            box-shadow: 0px 3px 15px rgba(97, 97, 97, 0.843);
+        }
+    </style>
+</head>
+<body>
+    <div>
+
+        <div style="display: flex; align-items: center; justify-content: center;">
+           <div class="Table-Task">
+                <div class="Header" style="width: 100%; text-align: center;align-items: center; background-color: blueviolet; color: aliceblue; padding: 7px 0;">
+                    <h1 style="display: inline;">ToDo App</h1>
+
+                    <button id="add" class="circle" style="float: right; margin-right: 10px; background-color: white;"><span class="material-symbols-outlined">
+                                add
+                                    </span></button>
+                </div>
+
+            <div id="tasks" style="padding: 20px;">
+
+                <!-- <div class="task">
+                    <div class="task-info" style="width: 70%; margin-left: 20px;">
+
+                    <h2 id="title"></h2>
+                    <div style="margin-bottom: 20px;">
+                        <span class="material-symbols-outlined">
+                            calendar_month
+                            </span>
+                        <span>10/10/2024</span>
+                    </div>
+
+                    </div>
+
+                    <div class="actions" style="display: flex; align-items: center; justify-content: space-between; width: 20%; ">
+                        <button class="circle" style="background-color: rgb(165, 29, 29); color: aliceblue;"><span class="material-symbols-outlined">
+                            delete
+                            </span></button>
+                        <button class="circle" style="background-color: seagreen; color: aliceblue;"><span class="material-symbols-outlined">
+                            check
+                            </span></button>
+                        <button class="circle" style="background-color: rgb(17, 46, 109); color: aliceblue;"><span class="material-symbols-outlined">
+                            Edit
+                            </span></button>
+                    </div>
+
+                </div> -->
+
+            </div>
+
+           </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    // var title
+
+    // console.log(title)
+
+    var tasks = [
+        
+    ]
+function getTaskFromStorage(){
+
+    let reTask = tasks = JSON.parse(localStorage.getItem("tasks"))
+
+    if(reTask == null){
+        tasks = []
+    } else {
+        tasks = reTask
+    }
+
+}
+
+getTaskFromStorage()
+
+    function Fill(){
+    
+    document.getElementById("tasks").innerHTML = ""
+
+    let index = 0
+    for(task of tasks){
+        let content = 
+        document.getElementById("tasks").innerHTML +=
+        `
+        <div class="task ${task.isDone==true? `done`: `task`}">
+                    <div class="task-info" style="width: 70%; margin-left: 20px;">
+
+                    <h2>${task.title}</h2>
+                    <div style="margin-bottom: 20px;">
+                        <span class="material-symbols-outlined">
+                            calendar_month
+                            </span>
+                        <span>${task.date}</span>
+                    </div>
+
+                    </div>
+
+                    <div class="actions" id="ac" style=" align-items: center; justify-content: space-between; width: 20%; ">
+                        <button onclick="deleteTask(${index})" class="circle" style="background-color: rgb(165, 29, 29); color: aliceblue;"><span class="material-symbols-outlined">
+                            delete
+                            </span></button>
+                            ${task.isDone==false ? `
+                                <button onclick="done(${index})" class="circle" style="background-color: seagreen; color: aliceblue;"><span class="material-symbols-outlined">
+                            check
+                            </span></button>   
+                                `:`
+                                <button onclick="done(${index})" class="circle" style="background-color: #E78B2F; color: aliceblue;"><span class="material-symbols-outlined">
+                                    cancel
+                                </span></button>
+                                `}
+                       
+                        <button onclick="editTask(${index})" class="circle" style="background-color: #2A88E1; color: aliceblue;"><span class="material-symbols-outlined">
+                            Edit
+                            </span></button>
+                    </div>
+                </div>
+        `
+        index++
+    }};
+
+    function deleteTask(index){
+        let task = tasks[index]
+        let con = confirm("Are You Sure to delete "+ task.title+"?")
+        if (con) {
+            tasks.splice(index,1)
+            storeTask()
+            Fill()
+        }
+    }
+
+    function editTask(index){
+        let task = tasks[index]
+        let newTask = prompt("Enter The New Task Name: ",task.title);
+        task.title = newTask
+        storeTask()
+        Fill();
+        // alert(newTask)
+    }
+
+    function done(index){
+        let task = tasks[index]
+        if(task.isDone){
+            task.isDone = false
+        } else{
+            task.isDone = true
+        }
+        storeTask()
+        Fill();
+
+    }
+
+
+    console.log(Fill());
+    // let name = localStorage.getItem("name")
+
+    document.getElementById("add").addEventListener("click", ()=>{
+        let now = new Date();
+        let date = now.getDate()+"/"+(now.getMonth()+1)+"/"+now.getFullYear()+ " | "+ (now.getHours()%12)+":"+now.getMinutes();
+        let taskName = prompt("Enter The Task: ")
+         
+         let taskOjt = {
+            "title": taskName,
+            "date": date,
+            "isDone": false
+         }
+
+        //  if(taskName===null){
+            
+        //  } else {
+            tasks.push(taskOjt)
+
+            
+            storeTask()
+            Fill();
+        //  }
+        });
+
+        // ========= Storage Functions ==========
+
+        function storeTask(){
+            let taskString = JSON.stringify(tasks)
+            // console.log(taskString)
+            localStorage.setItem("tasks",taskString)
+        }
+    </script>
+
+    <style>
+        @media  all and (max-width:600px){
+            .Table-Task{
+                width: 90%;
+            }
+            .actions{
+                display: block;
+            }
+
+            .actions button{
+                margin: 5px;
+            }
+
+            
+        }
+    </style>
+</html>
